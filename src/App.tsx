@@ -3,7 +3,7 @@ import { Container, Title, Button } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
 import dayjs from 'dayjs';
-import { IconMinus, IconPlus } from '@tabler/icons-react';
+import { IconDatabase, IconPlus } from '@tabler/icons-react';
 import CreateExpense from './CreateExpense';
 import ExpenseChart from './ExpenseChart';
 import ExpenseTable from './ExpenseTable';
@@ -26,7 +26,7 @@ export default function App() {
       <Button className='w-full mb-3' leftIcon={<IconPlus />} onClick={open}>
         Add Expense
       </Button>
-      <Button color='gray' className='w-full mb-3' leftIcon={<IconMinus />} onClick={openCategories}>
+      <Button color='gray' className='w-full mb-3' leftIcon={<IconDatabase />} onClick={openCategories}>
         Manage Categories
       </Button>
       <DatePickerInput

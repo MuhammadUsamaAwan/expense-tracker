@@ -49,7 +49,6 @@ export default function CreateExpense({ opened, close }: CreateExpenseProps) {
           label='Date'
           placeholder='Pick date'
           maxDate={new Date()}
-          required
           className='mb-2'
         />
         <Select

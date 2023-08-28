@@ -45,7 +45,7 @@ export default function Categories({ opened, close }: CategoriesProps) {
           value={category}
           onChange={e => setCategory(e.target.value)}
         />
-        <Button>Add</Button>
+        <Button type='submit'>Add</Button>
       </form>
       <Table striped withBorder withColumnBorders className='pb-4'>
         <thead>

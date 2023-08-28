@@ -29,7 +29,14 @@ export default function Categories({ opened, close }: CategoriesProps) {
   };
 
   return (
-    <Modal opened={opened} onClose={close} title='Manage Categories'>
+    <Modal
+      opened={opened}
+      onClose={() => {
+        setCategory('');
+        close();
+      }}
+      title='Manage Categories'
+    >
       <form
         className='flex space-x-2 mb-3'
         onSubmit={e => {
@@ -47,26 +54,30 @@ export default function Categories({ opened, close }: CategoriesProps) {
         />
         <Button type='submit'>Add</Button>
       </form>
-      <Table striped withBorder withColumnBorders className='pb-4'>
-        <thead>
-          <tr>
-            <th>Category</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {categories.map((category, index) => (
-            <tr key={index}>
-              <td>{category}</td>
-              <td>
-                <ActionIcon onClick={() => handleDelete(index)}>
-                  <IconTrashX size='1.25rem' />
-                </ActionIcon>
-              </td>
+      {categories.length > 0 ? (
+        <Table striped withBorder withColumnBorders className='pb-4'>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {categories.map((category, index) => (
+              <tr key={index}>
+                <td>{category}</td>
+                <td>
+                  <ActionIcon onClick={() => handleDelete(index)}>
+                    <IconTrashX size='1.25rem' />
+                  </ActionIcon>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      ) : (
+        <p className='text-center'>No categories yet</p>
+      )}
     </Modal>
   );
 }

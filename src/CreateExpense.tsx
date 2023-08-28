@@ -33,7 +33,14 @@ export default function CreateExpense({ opened, close }: CreateExpenseProps) {
   });
 
   return (
-    <Modal opened={opened} onClose={close} title='Add Expense'>
+    <Modal
+      opened={opened}
+      onClose={() => {
+        form.reset();
+        close();
+      }}
+      title='Add Expense'
+    >
       <form
         onSubmit={form.onSubmit(values => {
           const { category, amount, date } = values;

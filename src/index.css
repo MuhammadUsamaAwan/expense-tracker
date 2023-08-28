@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.mantine-Paper-root {
+  overflow: visible;
+}
+
+.mantine-Popover-dropdown {
+  z-index: 1000 !important;
+}

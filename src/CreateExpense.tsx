@@ -45,8 +45,8 @@ export default function CreateExpense({ opened, close }: CreateExpenseProps) {
         onSubmit={form.onSubmit(values => {
           const { category, amount, date } = values;
           if (!category || !amount || !date) return;
-
           setExpenses([...expenses, { category, amount, date: date.toString() }]);
+          form.reset();
           close();
         })}
         className='pb-4'

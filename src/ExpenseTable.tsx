@@ -15,17 +15,19 @@ export default function ExpenseTable({ dateRange }: ExpenseTableProps) {
   });
 
   const data = useMemo(() => {
-    return expenses.filter(expense => {
-      const expenseDate = new Date(expense.date);
-      const startDate = dateRange[0] !== null ? new Date(dateRange[0]) : null;
-      const endDate = dateRange[1] !== null ? new Date(dateRange[1]) : null;
+    return expenses
+      .filter(expense => {
+        const expenseDate = new Date(expense.date);
+        const startDate = dateRange[0] !== null ? new Date(dateRange[0]) : null;
+        const endDate = dateRange[1] !== null ? new Date(dateRange[1]) : null;
 
-      if (!startDate && !endDate) return true;
-      if (!startDate) return expenseDate <= dayjs(endDate).endOf('day').toDate();
-      if (!endDate) return expenseDate >= startDate;
+        if (!startDate && !endDate) return true;
+        if (!startDate) return expenseDate <= dayjs(endDate).endOf('day').toDate();
+        if (!endDate) return expenseDate >= startDate;
 
-      return expenseDate >= startDate && expenseDate <= dayjs(endDate).endOf('day').toDate();
-    });
+        return expenseDate >= startDate && expenseDate <= dayjs(endDate).endOf('day').toDate();
+      })
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }, [dateRange, expenses]);
 
   const handleDelete = (index: number) => {
@@ -59,6 +61,12 @@ export default function ExpenseTable({ dateRange }: ExpenseTableProps) {
             </td>
           </tr>
         ))}
+        <tr>
+          <td>Total</td>
+          <td></td>
+          <td></td>
+          <td>{expenses.reduce((acc, curr) => acc + curr.amount, 0)}</td>
+        </tr>
       </tbody>
     </Table>
   );

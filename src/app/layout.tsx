@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
-import { ColorSchemeScript, DEFAULT_THEME, MantineProvider } from '@mantine/core';
+import { ColorSchemeScript, Container, DEFAULT_THEME, MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 
 import { siteConfig } from '~/config/site';
 import { greycliffCF } from '~/lib/fonts';
 
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 
 export const metadata: Metadata = {
   title: {
@@ -31,7 +33,8 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
           }}
           defaultColorScheme='dark'
         >
-          {children}
+          <Notifications />
+          <Container py='lg'>{children}</Container>
         </MantineProvider>
       </body>
     </html>

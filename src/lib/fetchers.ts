@@ -10,7 +10,7 @@ import { getUser } from '~/lib/auth';
 export async function getExpenses({ startDate, endDate }: { startDate?: string; endDate?: string }) {
   const user = await getUser();
   if (!user) {
-    throw new Error('Unauthorized');
+    return [];
   }
   const result = await db
     .select({
@@ -37,12 +37,17 @@ export async function getExpenses({ startDate, endDate }: { startDate?: string; 
   return result;
 }
 
-export function getCategories() {
+export async function getCategories() {
+  const user = await getUser();
+  if (!user) {
+    return [];
+  }
   return db
     .select({
       id: categories.id,
       name: categories.name,
       color: categories.color,
     })
-    .from(categories);
+    .from(categories)
+    .where(eq(categories.username, user.username));
 }

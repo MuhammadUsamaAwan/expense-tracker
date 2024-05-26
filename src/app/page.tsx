@@ -1,18 +1,26 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { Button, Flex, Title } from '@mantine/core';
+import { Button, Flex, Text, Title } from '@mantine/core';
 import { IconLogout, IconTag } from '@tabler/icons-react';
 
 import { signout } from '~/lib/actions';
 import { getUser } from '~/lib/auth';
 import { getCategories, getExpenses } from '~/lib/fetchers';
 import { AddExpense } from '~/components/add-expense';
+import { DateRangeFilter } from '~/components/daterange-filter';
 import { ExpensesTable } from '~/components/expenses-table';
 
-export default async function HomePage() {
+type HomePageProps = {
+  searchParams: {
+    startDate: string | undefined;
+    endDate: string | undefined;
+  };
+};
+
+export default async function HomePage({ searchParams: { startDate, endDate } }: HomePageProps) {
   const user = await getUser();
   const categories = await getCategories();
-  const expenses = await getExpenses();
+  const expenses = await getExpenses({ startDate, endDate });
 
   if (!user) {
     redirect('/signin');
@@ -34,7 +42,12 @@ export default async function HomePage() {
           </Button>
         </form>
       </Flex>
-      <ExpensesTable categories={categories} expenses={expenses} />
+      <DateRangeFilter />
+      {expenses.length === 0 ? (
+        <Text>No expenses found...</Text>
+      ) : (
+        <ExpensesTable categories={categories} expenses={expenses} />
+      )}
     </>
   );
 }

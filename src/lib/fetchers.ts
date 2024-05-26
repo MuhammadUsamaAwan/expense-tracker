@@ -1,4 +1,5 @@
-import { asc, eq } from 'drizzle-orm';
+import dayjs from 'dayjs';
+import { and, asc, eq, gt, lt } from 'drizzle-orm';
 
 import 'server-only';
 
@@ -6,7 +7,7 @@ import { db } from '~/db';
 import { categories, expenses } from '~/db/schema';
 import { getUser } from '~/lib/auth';
 
-export async function getExpenses() {
+export async function getExpenses({ startDate, endDate }: { startDate?: string; endDate?: string }) {
   const user = await getUser();
   if (!user) {
     throw new Error('Unauthorized');
@@ -24,7 +25,13 @@ export async function getExpenses() {
     })
     .from(expenses)
     .innerJoin(categories, eq(expenses.category, categories.id))
-    .where(eq(expenses.username, user.username))
+    .where(
+      and(
+        eq(expenses.username, user.username),
+        startDate ? gt(expenses.date, dayjs(startDate).subtract(1, 'day').toDate()) : undefined,
+        endDate ? lt(expenses.date, dayjs(endDate).toDate()) : undefined
+      )
+    )
     .orderBy(asc(expenses.date));
   return result;
 }

@@ -11,6 +11,7 @@ export const categories = pgTable('categories', {
     .primaryKey()
     .default(sql`gen_random_uuid()`),
   name: varchar('name', { length: 255 }).notNull(),
+  color: varchar('color', { length: 255 }).notNull(),
   username: varchar('username', { length: 255 })
     .references(() => users.username)
     .notNull(),

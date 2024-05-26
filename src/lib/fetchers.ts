@@ -21,6 +21,7 @@ export async function getExpenses({ startDate, endDate }: { startDate?: string; 
       category: {
         id: categories.id,
         name: categories.name,
+        color: categories.color,
       },
     })
     .from(expenses)
@@ -41,6 +42,7 @@ export function getCategories() {
     .select({
       id: categories.id,
       name: categories.name,
+      color: categories.color,
     })
     .from(categories);
 }

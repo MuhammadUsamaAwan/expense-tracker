@@ -29,6 +29,13 @@
       "when": 1716709487913,
       "tag": "0003_chilly_naoko",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1716717288298,
+      "tag": "0004_chief_post",
+      "breakpoints": true
     }
   ]
 }

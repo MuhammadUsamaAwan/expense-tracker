@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ActionIcon, Modal, Table } from '@mantine/core';
+import { ActionIcon, Box, Flex, Modal, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 
@@ -24,6 +24,7 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Name</Table.Th>
+            <Table.Th>Color</Table.Th>
             <Table.Th>Actions</Table.Th>
           </Table.Tr>
         </Table.Thead>
@@ -31,6 +32,20 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
           {categories.map(c => (
             <Table.Tr key={c.id}>
               <Table.Td>{c.name}</Table.Td>
+              <Table.Td width={200}>
+                <Flex align='center'>
+                  <Box
+                    w={10}
+                    h={10}
+                    bg={c.color}
+                    style={{
+                      borderRadius: '50%',
+                    }}
+                    mb={2}
+                  ></Box>
+                  <Box ml={2}>{c.color}</Box>
+                </Flex>
+              </Table.Td>
               <Table.Td width={100}>
                 <ActionIcon
                   variant='subtle'

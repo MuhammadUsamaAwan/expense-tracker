@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { Button, Flex, Text, Title } from '@mantine/core';
+import { Button, Flex, Space, Text, Title } from '@mantine/core';
 import { IconLogout, IconTag } from '@tabler/icons-react';
 
 import { signout } from '~/lib/actions';
@@ -8,6 +8,7 @@ import { getUser } from '~/lib/auth';
 import { getCategories, getExpenses } from '~/lib/fetchers';
 import { AddExpense } from '~/components/add-expense';
 import { DateRangeFilter } from '~/components/daterange-filter';
+import { ExpensesDonutChart } from '~/components/expenses-donut-chart';
 import { ExpensesTable } from '~/components/expenses-table';
 
 type HomePageProps = {
@@ -46,7 +47,11 @@ export default async function HomePage({ searchParams: { startDate, endDate } }:
       {expenses.length === 0 ? (
         <Text>No expenses found...</Text>
       ) : (
-        <ExpensesTable categories={categories} expenses={expenses} />
+        <>
+          <ExpensesDonutChart expenses={expenses} />
+          <Space h='md' />
+          <ExpensesTable categories={categories} expenses={expenses} />
+        </>
       )}
     </>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import { useTransition } from 'react';
-import { Button, Flex, TextInput } from '@mantine/core';
+import { Button, ColorInput, DEFAULT_THEME, Flex, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { zodResolver } from 'mantine-form-zod-resolver';
 
@@ -22,6 +22,7 @@ export function AddEditCategoryForm({ onClose, category }: AddEditCategoryFormPr
     mode: 'uncontrolled',
     initialValues: {
       name: category?.name ?? '',
+      color: category?.color ?? '',
     },
     validate: zodResolver(categorySchema),
   });
@@ -52,6 +53,29 @@ export function AddEditCategoryForm({ onClose, category }: AddEditCategoryFormPr
         min={0}
         mb='md'
         data-autofocus
+      />
+      <ColorInput
+        withAsterisk
+        label='Color'
+        placeholder='Enter color'
+        key={form.key('color')}
+        {...form.getInputProps('color')}
+        mb='md'
+        swatches={[
+          DEFAULT_THEME.colors.dark[6],
+          DEFAULT_THEME.colors.gray[6],
+          DEFAULT_THEME.colors.red[6],
+          DEFAULT_THEME.colors.grape[6],
+          DEFAULT_THEME.colors.violet[6],
+          DEFAULT_THEME.colors.indigo[6],
+          DEFAULT_THEME.colors.blue[6],
+          DEFAULT_THEME.colors.cyan[6],
+          DEFAULT_THEME.colors.teal[6],
+          DEFAULT_THEME.colors.green[6],
+          DEFAULT_THEME.colors.lime[6],
+          DEFAULT_THEME.colors.yellow[6],
+          DEFAULT_THEME.colors.orange[6],
+        ]}
       />
       <Flex justify='flex-end' mt='md'>
         <Button type='button' variant='default' onClick={onClose}>

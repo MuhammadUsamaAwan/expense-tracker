@@ -92,8 +92,8 @@ export async function addCategory(rawInput: z.infer<typeof categorySchema>) {
   if (!user) {
     throw new Error('Unauthorized');
   }
-  const { name } = categorySchema.parse(rawInput);
-  await db.insert(categories).values({ name, username: user.username });
+  const { name, color } = categorySchema.parse(rawInput);
+  await db.insert(categories).values({ name, color, username: user.username });
   revalidatePath('/', 'layout');
 }
 
@@ -102,10 +102,10 @@ export async function updateCategory(rawInput: z.infer<typeof updateCategorySche
   if (!user) {
     throw new Error('Unauthorized');
   }
-  const { id, name } = updateCategorySchema.parse(rawInput);
+  const { id, name, color } = updateCategorySchema.parse(rawInput);
   await db
     .update(categories)
-    .set({ name })
+    .set({ name, color })
     .where(and(eq(categories.id, id), eq(categories.username, user.username)));
   revalidatePath('/', 'layout');
 }

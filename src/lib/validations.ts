@@ -7,6 +7,7 @@ export const authSchema = z.object({
 
 export const categorySchema = z.object({
   name: z.string().min(3).max(30),
+  color: z.string().min(1),
 });
 
 export const updateCategorySchema = categorySchema.extend({

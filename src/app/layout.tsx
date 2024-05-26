@@ -8,6 +8,7 @@ import { greycliffCF } from '~/lib/fonts';
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import '@mantine/dates/styles.css';
+import '@mantine/charts/styles.css';
 
 export const metadata: Metadata = {
   title: {

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { ActionIcon, Button, Flex, Space, Text, Title } from '@mantine/core';
+import { Button, Flex, Space, Text, Title } from '@mantine/core';
 import { IconLogout, IconTag } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 

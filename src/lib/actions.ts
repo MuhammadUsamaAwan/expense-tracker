@@ -3,7 +3,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
-import { compare, hash } from 'bcrypt';
+import { compare, hash } from 'bcryptjs';
 import { and, eq } from 'drizzle-orm';
 import { SignJWT } from 'jose';
 import { type z } from 'zod';

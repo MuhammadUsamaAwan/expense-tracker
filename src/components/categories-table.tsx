@@ -55,6 +55,7 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
                       setCategory(c);
                       openEdit();
                     }}
+                    aria-label='Edit category'
                   >
                     <IconEdit size={16} />
                   </ActionIcon>
@@ -65,6 +66,7 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
                       setCategory(c);
                       openDelete();
                     }}
+                    aria-label='Delete category'
                   >
                     <IconTrash size={16} />
                   </ActionIcon>

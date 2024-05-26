@@ -31,6 +31,7 @@ const config = {
       rootDir: ['./'],
     },
   },
+  ignorePatterns: ['public'],
 };
 
 module.exports = config;

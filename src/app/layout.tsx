@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { ColorSchemeScript, Container, DEFAULT_THEME, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 
@@ -18,6 +18,36 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   icons: ['/favicon.svg'],
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: siteConfig.title,
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  openGraph: {
+    type: 'website',
+    siteName: siteConfig.title,
+    title: {
+      default: siteConfig.title,
+      template: `%s - ${siteConfig.title}`,
+    },
+    description: siteConfig.description,
+  },
+  twitter: {
+    card: 'summary',
+    title: {
+      default: siteConfig.title,
+      template: `%s - ${siteConfig.title}`,
+    },
+    description: siteConfig.description,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#C9C9C9',
 };
 
 export default function RootLayout({ children }: React.PropsWithChildren) {

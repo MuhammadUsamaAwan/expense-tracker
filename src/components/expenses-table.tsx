@@ -49,6 +49,7 @@ export function ExpensesTable({ categories, expenses }: ExpensesTableProps) {
                         setExpense(e);
                         openEdit();
                       }}
+                      aria-label='Edit expense'
                     >
                       <IconEdit size={16} />
                     </ActionIcon>
@@ -59,6 +60,7 @@ export function ExpensesTable({ categories, expenses }: ExpensesTableProps) {
                         setExpense(e);
                         openDelete();
                       }}
+                      aria-label='Delete expense'
                     >
                       <IconTrash size={16} />
                     </ActionIcon>

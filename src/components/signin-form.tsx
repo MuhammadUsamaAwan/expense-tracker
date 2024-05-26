@@ -52,7 +52,7 @@ export function SigninForm() {
       <Flex justify='space-between' align='center' mt='md'>
         <div>
           Don&apos;t have an account?{' '}
-          <Anchor component={Link} href='/signin'>
+          <Anchor component={Link} href='/signup'>
             Sign up
           </Anchor>
         </div>

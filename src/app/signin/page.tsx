@@ -14,7 +14,7 @@ export default async function SignupPage() {
   return (
     <>
       <Title order={1} ta='center' mb='lg'>
-        Signin to Expense Tracker
+        Sign in to Expense Tracker
       </Title>
       <SigninForm />
     </>

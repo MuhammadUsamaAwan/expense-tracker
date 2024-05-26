@@ -22,11 +22,13 @@ export const expenses = pgTable('expenses', {
     .default(sql`gen_random_uuid()`),
   amount: real('amount').notNull(),
   category: uuid('category')
-    .references(() => categories.id)
+    .references(() => categories.id, {
+      onDelete: 'cascade',
+    })
     .notNull(),
   username: varchar('username', { length: 255 })
     .references(() => users.username)
     .notNull(),
-  description: varchar('description', { length: 255 }).notNull(),
+  description: varchar('description', { length: 255 }),
   date: timestamp('date').notNull(),
 });

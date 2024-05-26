@@ -15,6 +15,20 @@
       "when": 1716673398738,
       "tag": "0001_talented_toxin",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1716678384466,
+      "tag": "0002_clumsy_namora",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1716709487913,
+      "tag": "0003_chilly_naoko",
+      "breakpoints": true
     }
   ]
 }

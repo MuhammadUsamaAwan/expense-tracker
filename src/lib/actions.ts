@@ -4,16 +4,16 @@
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { compare, hash } from 'bcrypt';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { SignJWT } from 'jose';
 import { type z } from 'zod';
 
 import { env } from '~/env.mjs';
 import type { JWTPayload } from '~/types';
 import { db } from '~/db';
-import { users } from '~/db/schema';
-
-import { authSchema } from './validations';
+import { categories, users } from '~/db/schema';
+import { getUser } from '~/lib/auth';
+import { authSchema, categorySchema, updateCategorySchema } from '~/lib/validations';
 
 export async function signup(rawInput: z.infer<typeof authSchema>) {
   const { username, password } = authSchema.parse(rawInput);
@@ -78,5 +78,37 @@ export async function signout() {
     sameSite: 'lax',
     maxAge: 0,
   });
+  revalidatePath('/', 'layout');
+}
+
+export async function addCategory(rawInput: z.infer<typeof categorySchema>) {
+  const user = await getUser();
+  if (!user) {
+    throw new Error('Unauthorized');
+  }
+  const { name } = categorySchema.parse(rawInput);
+  await db.insert(categories).values({ name, username: user.username });
+  revalidatePath('/', 'layout');
+}
+
+export async function updateCategory(rawInput: z.infer<typeof updateCategorySchema>) {
+  const user = await getUser();
+  if (!user) {
+    throw new Error('Unauthorized');
+  }
+  const { id, name } = updateCategorySchema.parse(rawInput);
+  await db
+    .update(categories)
+    .set({ name })
+    .where(and(eq(categories.id, id), eq(categories.username, user.username)));
+  revalidatePath('/', 'layout');
+}
+
+export async function deleteCategory(id: string) {
+  const user = await getUser();
+  if (!user) {
+    throw new Error('Unauthorized');
+  }
+  await db.delete(categories).where(and(eq(categories.id, id), eq(categories.username, user.username)));
   revalidatePath('/', 'layout');
 }

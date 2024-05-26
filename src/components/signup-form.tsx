@@ -53,7 +53,7 @@ export function SignupForm() {
         <div>
           Already have an account?{' '}
           <Anchor component={Link} href='/signin'>
-            Signin
+            Sign in
           </Anchor>
         </div>
         <Button type='submit' loading={isPending}>

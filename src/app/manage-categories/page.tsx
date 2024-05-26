@@ -18,10 +18,10 @@ export default async function ManageCategories() {
 
   return (
     <>
-      <Flex>
-        <Title order={1} mb='lg' flex={1}>
-          Add Category
-        </Title>
+      <Title order={1} mb='sm' flex={1}>
+        Add Category
+      </Title>
+      <Flex mb='lg' justify='space-between'>
         <AddCategory />
         <Button leftSection={<IconArrowNarrowLeft size={14} />} component={Link} href='/' ml='sm'>
           Back

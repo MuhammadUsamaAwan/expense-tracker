@@ -1,7 +1,6 @@
 'use client';
 
 import { DonutChart } from '@mantine/charts';
-import { Box } from '@mantine/core';
 
 import type { Expense } from '~/types';
 

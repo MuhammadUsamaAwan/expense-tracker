@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { Button, Flex, Space, Text, Title } from '@mantine/core';
+import { ActionIcon, Button, Flex, Space, Text, Title } from '@mantine/core';
 import { IconLogout, IconTag } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 
@@ -33,16 +33,18 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
   return (
     <>
-      <Flex>
-        <Title order={1} mb='lg' flex={1}>
-          Expense Tracker
-        </Title>
-        <AddExpense categories={categories} />
-        <Button leftSection={<IconTag size={14} />} component={Link} href='/manage-categories' ml='sm'>
-          Manage Categories
-        </Button>
+      <Title order={1} mb='sm' ta='center' flex={1}>
+        Expense Tracker
+      </Title>
+      <Flex mb='lg' justify='space-between' wrap='wrap' gap='sm'>
+        <Flex align='center'>
+          <AddExpense categories={categories} />
+          <Button leftSection={<IconTag size={14} />} component={Link} href='/manage-categories' ml='sm'>
+            Manage Categories
+          </Button>
+        </Flex>
         <form action={signout}>
-          <Button leftSection={<IconLogout size={14} />} variant='outline' ml='sm' type='submit'>
+          <Button leftSection={<IconLogout size={14} />} variant='outline' type='submit'>
             Logout
           </Button>
         </form>

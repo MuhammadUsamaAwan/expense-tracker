@@ -1,12 +1,14 @@
 import { sql } from 'drizzle-orm';
-import { pgTable, real, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { pgTableCreator, real, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 
-export const users = pgTable('users', {
+const createTable = pgTableCreator(name => `expense_tacker_${name}`);
+
+export const users = createTable('users', {
   username: varchar('username', { length: 255 }).primaryKey(),
   password: varchar('password', { length: 255 }),
 });
 
-export const categories = pgTable('categories', {
+export const categories = createTable('categories', {
   id: uuid('id')
     .primaryKey()
     .default(sql`gen_random_uuid()`),
@@ -17,7 +19,7 @@ export const categories = pgTable('categories', {
     .notNull(),
 });
 
-export const expenses = pgTable('expenses', {
+export const expenses = createTable('expenses', {
   id: uuid('id')
     .primaryKey()
     .default(sql`gen_random_uuid()`),

@@ -9,6 +9,7 @@ import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import '@mantine/dates/styles.css';
 import '@mantine/charts/styles.css';
+import '~/styles/globals.css';
 
 export const metadata: Metadata = {
   title: {
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.title}`,
   },
   description: siteConfig.description,
+  icons: ['/favicon.svg'],
 };
 
 export default function RootLayout({ children }: React.PropsWithChildren) {

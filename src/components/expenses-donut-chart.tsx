@@ -1,6 +1,7 @@
 'use client';
 
 import { DonutChart } from '@mantine/charts';
+import { Box } from '@mantine/core';
 
 import type { Expense } from '~/types';
 
@@ -48,5 +49,15 @@ function transformExpenses(expenses: Expense[]): ExpenseSummary[] {
 }
 
 export function ExpensesDonutChart({ expenses }: ExpensesDonutChartProps) {
-  return <DonutChart mx='auto' withLabelsLine withLabels data={transformExpenses(expenses)} />;
+  return (
+    <DonutChart
+      size={200}
+      mx='auto'
+      withLabelsLine
+      withLabels
+      data={transformExpenses(expenses)}
+      strokeWidth={0}
+      tooltipDataSource='segment'
+    />
+  );
 }

@@ -26,9 +26,9 @@ export function ExpensesTable({ categories, expenses }: ExpensesTableProps) {
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Date</Table.Th>
+            <Table.Th>Amount</Table.Th>
             <Table.Th>Category</Table.Th>
             <Table.Th>Description</Table.Th>
-            <Table.Th>Amount</Table.Th>
             <Table.Th>Actions</Table.Th>
           </Table.Tr>
         </Table.Thead>
@@ -36,9 +36,9 @@ export function ExpensesTable({ categories, expenses }: ExpensesTableProps) {
           {expenses.map(e => (
             <Table.Tr key={e.id}>
               <Table.Td>{dayjs(e.date).format('DD MMM, YYYY')}</Table.Td>
+              <Table.Td>{e.amount}</Table.Td>
               <Table.Td>{e.category.name}</Table.Td>
               <Table.Td>{e.description}</Table.Td>
-              <Table.Td>{e.amount}</Table.Td>
               <Table.Td width={100}>
                 <ActionIcon
                   variant='subtle'

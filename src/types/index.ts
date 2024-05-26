@@ -6,3 +6,11 @@ export type Category = {
   id: string;
   name: string;
 };
+
+export type Expense = {
+  id: string;
+  amount: number;
+  date: Date;
+  category: Category;
+  description: string | null;
+};

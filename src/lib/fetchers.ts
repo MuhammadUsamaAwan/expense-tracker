@@ -1,3 +1,5 @@
+import { asc, eq } from 'drizzle-orm';
+
 import 'server-only';
 
 import { db } from '~/db';
@@ -9,7 +11,21 @@ export async function getExpenses() {
   if (!user) {
     throw new Error('Unauthorized');
   }
-  const result = await db.select().from(expenses);
+  const result = await db
+    .select({
+      id: expenses.id,
+      amount: expenses.amount,
+      date: expenses.date,
+      description: expenses.description,
+      category: {
+        id: categories.id,
+        name: categories.name,
+      },
+    })
+    .from(expenses)
+    .innerJoin(categories, eq(expenses.category, categories.id))
+    .where(eq(expenses.username, user.username))
+    .orderBy(asc(expenses.date));
   return result;
 }
 

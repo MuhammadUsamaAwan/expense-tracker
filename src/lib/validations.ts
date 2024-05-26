@@ -16,6 +16,10 @@ export const updateCategorySchema = categorySchema.extend({
 export const expenseSchema = z.object({
   amount: z.number().positive(),
   category: z.string().uuid(),
-  description: z.string().min(3).max(30).optional(),
+  description: z.string().max(30).optional(),
   date: z.date(),
+});
+
+export const updateExpenseSchema = expenseSchema.extend({
+  id: z.string().uuid(),
 });

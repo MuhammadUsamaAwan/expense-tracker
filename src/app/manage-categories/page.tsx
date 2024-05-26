@@ -5,7 +5,7 @@ import { IconArrowNarrowLeft } from '@tabler/icons-react';
 
 import { getUser } from '~/lib/auth';
 import { getCategories } from '~/lib/fetchers';
-import { AddCategory } from '~/components/add-edit-category';
+import { AddCategory } from '~/components/add-category';
 import { CategoriesTable } from '~/components/categories-table';
 
 export default async function ManageCategories() {

@@ -1,10 +1,8 @@
 'use client';
 
 import { useTransition } from 'react';
-import { Button, Flex, Modal, TextInput } from '@mantine/core';
+import { Button, Flex, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useDisclosure } from '@mantine/hooks';
-import { IconPlus } from '@tabler/icons-react';
 import { zodResolver } from 'mantine-form-zod-resolver';
 
 import type { Category } from '~/types';
@@ -12,27 +10,12 @@ import { addCategory, updateCategory } from '~/lib/actions';
 import { showError } from '~/lib/utils';
 import { categorySchema } from '~/lib/validations';
 
-export function AddCategory() {
-  const [opened, { open, close }] = useDisclosure(false);
-
-  return (
-    <>
-      <Button leftSection={<IconPlus size={14} />} onClick={open}>
-        Add Category
-      </Button>
-
-      <Modal opened={opened} onClose={close} title='Add Cagtegory'>
-        <AddEditCategoryForm onSuccess={close} />
-      </Modal>
-    </>
-  );
-}
 type AddEditCategoryFormProps = {
-  onSuccess: () => void;
-  category?: Category;
+  onClose: () => void;
+  category?: Category | null;
 };
 
-export function AddEditCategoryForm({ onSuccess, category }: AddEditCategoryFormProps) {
+export function AddEditCategoryForm({ onClose, category }: AddEditCategoryFormProps) {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm({
@@ -53,7 +36,7 @@ export function AddEditCategoryForm({ onSuccess, category }: AddEditCategoryForm
             } else {
               await addCategory(values);
             }
-            onSuccess();
+            onClose();
           } catch (error) {
             showError(error);
           }
@@ -71,7 +54,10 @@ export function AddEditCategoryForm({ onSuccess, category }: AddEditCategoryForm
         data-autofocus
       />
       <Flex justify='flex-end' mt='md'>
-        <Button type='submit' loading={isPending}>
+        <Button type='button' variant='default' onClick={onClose}>
+          Cancel
+        </Button>
+        <Button type='submit' ml='sm' loading={isPending}>
           Submit
         </Button>
       </Flex>

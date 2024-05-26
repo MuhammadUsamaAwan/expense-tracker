@@ -11,9 +11,15 @@ import { type z } from 'zod';
 import { env } from '~/env.mjs';
 import type { JWTPayload } from '~/types';
 import { db } from '~/db';
-import { categories, users } from '~/db/schema';
+import { categories, expenses, users } from '~/db/schema';
 import { getUser } from '~/lib/auth';
-import { authSchema, categorySchema, updateCategorySchema } from '~/lib/validations';
+import {
+  authSchema,
+  categorySchema,
+  expenseSchema,
+  updateCategorySchema,
+  updateExpenseSchema,
+} from '~/lib/validations';
 
 export async function signup(rawInput: z.infer<typeof authSchema>) {
   const { username, password } = authSchema.parse(rawInput);
@@ -111,4 +117,36 @@ export async function deleteCategory(id: string) {
   }
   await db.delete(categories).where(and(eq(categories.id, id), eq(categories.username, user.username)));
   revalidatePath('/', 'layout');
+}
+
+export async function addExpense(rawInput: z.infer<typeof expenseSchema>) {
+  const user = await getUser();
+  if (!user) {
+    throw new Error('Unauthorized');
+  }
+  const { amount, date, category, description } = expenseSchema.parse(rawInput);
+  await db.insert(expenses).values({ amount, date, category, description, username: user.username });
+  revalidatePath('/');
+}
+
+export async function updateExpense(rawInput: z.infer<typeof updateExpenseSchema>) {
+  const user = await getUser();
+  if (!user) {
+    throw new Error('Unauthorized');
+  }
+  const { id, amount, date, category, description } = updateExpenseSchema.parse(rawInput);
+  await db
+    .update(expenses)
+    .set({ amount, date, category, description })
+    .where(and(eq(expenses.id, id), eq(expenses.username, user.username)));
+  revalidatePath('/');
+}
+
+export async function deleteExpense(id: string) {
+  const user = await getUser();
+  if (!user) {
+    throw new Error('Unauthorized');
+  }
+  await db.delete(expenses).where(and(eq(expenses.id, id), eq(expenses.username, user.username)));
+  revalidatePath('/');
 }

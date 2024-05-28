@@ -4,7 +4,7 @@
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { compare, hash } from 'bcryptjs';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import { SignJWT } from 'jose';
 import { type z } from 'zod';
 
@@ -31,9 +31,9 @@ export async function signup(rawInput: z.infer<typeof authSchema>) {
     });
   } catch (error) {
     if (error && typeof error === 'object' && 'code' in error && error?.code === '23505') {
-      throw new Error('Username already exists');
+      return { error: 'Username already exists' };
     }
-    throw new Error('Unable to signup. Please try again later.');
+    return { error: 'Unable to signup. Please try again later.' };
   }
   await setAccessToken({ username });
   revalidatePath('/', 'layout');
@@ -47,16 +47,16 @@ export async function signin(rawInput: z.infer<typeof authSchema>) {
         password: users.password,
       })
       .from(users)
-      .where(eq(users.username, username));
+      .where(eq(sql`lower(${users.username})`, username.toLowerCase()));
     if (!user || !user.password) {
-      throw new Error('Invalid email or password');
+      return { error: 'Invalid email or password' };
     }
     const valid = await compare(password, user.password);
     if (!valid) {
-      throw new Error('Invalid email or password');
+      return { error: 'Invalid email or password' };
     }
   } catch (error) {
-    throw new Error('Unable to signin. Please try again later.');
+    return { error: 'Unable to signin. Please try again later.' };
   }
   await setAccessToken({ username });
   revalidatePath('/', 'layout');

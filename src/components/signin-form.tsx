@@ -26,10 +26,9 @@ export function SigninForm() {
     <form
       onSubmit={form.onSubmit(values =>
         startTransition(async () => {
-          try {
-            await signin(values);
-          } catch (error) {
-            showError(error);
+          const res = await signin(values);
+          if (res?.error) {
+            showError(res.error);
           }
         })
       )}

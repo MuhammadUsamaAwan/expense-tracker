@@ -26,10 +26,9 @@ export function SignupForm() {
     <form
       onSubmit={form.onSubmit(values =>
         startTransition(async () => {
-          try {
-            await signup(values);
-          } catch (error) {
-            showError(error);
+          const res = await signup(values);
+          if (res?.error) {
+            showError(res.error);
           }
         })
       )}

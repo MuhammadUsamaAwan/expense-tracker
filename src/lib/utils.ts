@@ -1,9 +1,9 @@
 import { notifications } from '@mantine/notifications';
 
-export function showError(error?: string) {
+export function showError(error?: unknown) {
   notifications.show({
     color: 'red',
     title: 'Error',
-    message: error ?? 'Something went wrong.',
+    message: typeof error === 'string' ? error : error instanceof Error ? error.message : 'Something went wrong.',
   });
 }

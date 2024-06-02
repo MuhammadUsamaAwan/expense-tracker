@@ -29,14 +29,14 @@ export async function signup(rawInput: z.infer<typeof authSchema>) {
       username,
       password: hashed,
     });
+    await setAccessToken({ username });
+    revalidatePath('/', 'layout');
   } catch (error) {
     if (error && typeof error === 'object' && 'code' in error && error?.code === '23505') {
       return { error: 'Username already exists' };
     }
     return { error: 'Unable to signup. Please try again later.' };
   }
-  await setAccessToken({ username });
-  revalidatePath('/', 'layout');
 }
 
 export async function signin(rawInput: z.infer<typeof authSchema>) {
@@ -45,6 +45,7 @@ export async function signin(rawInput: z.infer<typeof authSchema>) {
     const [user] = await db
       .select({
         password: users.password,
+        username: users.username,
       })
       .from(users)
       .where(eq(sql`lower(${users.username})`, username.toLowerCase()));
@@ -55,11 +56,11 @@ export async function signin(rawInput: z.infer<typeof authSchema>) {
     if (!valid) {
       return { error: 'Invalid email or password' };
     }
+    await setAccessToken({ username: user.username });
+    revalidatePath('/', 'layout');
   } catch (error) {
     return { error: 'Unable to signin. Please try again later.' };
   }
-  await setAccessToken({ username });
-  revalidatePath('/', 'layout');
 }
 
 export async function setAccessToken(jwtPayload: JWTPayload) {

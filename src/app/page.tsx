@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { Button, Flex, Space, Text, Title } from '@mantine/core';
+import { Box, Button, Flex, Space, Text, Title } from '@mantine/core';
 import { IconLogout, IconTag } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 
@@ -55,6 +55,12 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         <Text>No expenses found...</Text>
       ) : (
         <>
+          <Flex justify='center' gap={4}>
+            <Box component='span' fw={600}>
+              Total Expense:
+            </Box>
+            <Box component='span'>{expenses.reduce((acc, e) => acc + e.amount, 0)}</Box>
+          </Flex>
           <ExpensesDonutChart expenses={expenses} />
           <Space h='md' />
           <ExpensesLineChart expenses={expenses} startDate={startDate} endDate={endDate} />

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ActionIcon, Flex, Modal, Table } from '@mantine/core';
+import { ActionIcon, Box, Flex, Modal, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import dayjs from 'dayjs';
@@ -68,6 +68,14 @@ export function ExpensesTable({ categories, expenses }: ExpensesTableProps) {
                 </Table.Td>
               </Table.Tr>
             ))}
+            <Table.Tr>
+              <Table.Td colSpan={5} align='center'>
+                <Box component='span' fw={600}>
+                  Total:
+                </Box>{' '}
+                {expenses.reduce((acc, e) => acc + e.amount, 0)}
+              </Table.Td>
+            </Table.Tr>
           </Table.Tbody>
         </Table>
       </Table.ScrollContainer>

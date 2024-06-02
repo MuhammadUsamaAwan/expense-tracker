@@ -4,7 +4,7 @@
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { compare, hash } from 'bcryptjs';
-import { and, eq, sql } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { SignJWT } from 'jose';
 import { type z } from 'zod';
 
@@ -45,10 +45,9 @@ export async function signin(rawInput: z.infer<typeof authSchema>) {
     const [user] = await db
       .select({
         password: users.password,
-        username: users.username,
       })
       .from(users)
-      .where(eq(sql`lower(${users.username})`, username.toLowerCase()));
+      .where(eq(users.username, username));
     if (!user || !user.password) {
       return { error: 'Invalid email or password' };
     }
@@ -56,7 +55,7 @@ export async function signin(rawInput: z.infer<typeof authSchema>) {
     if (!valid) {
       return { error: 'Invalid email or password' };
     }
-    await setAccessToken({ username: user.username });
+    await setAccessToken({ username });
     revalidatePath('/', 'layout');
   } catch (error) {
     return { error: 'Unable to signin. Please try again later.' };

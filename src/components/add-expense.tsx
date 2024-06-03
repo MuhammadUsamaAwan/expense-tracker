@@ -21,7 +21,7 @@ export function AddExpense({ categories }: AddExpenseProps) {
         Add Expense
       </Button>
 
-      <Modal opened={opened} onClose={close} title='Add Cagtegory'>
+      <Modal opened={opened} onClose={close} title='Add Expense'>
         <AddEditExpenseForm categories={categories} onClose={close} />
       </Modal>
     </>

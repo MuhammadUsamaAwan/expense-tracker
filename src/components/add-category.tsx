@@ -15,7 +15,7 @@ export function AddCategory() {
         Add Category
       </Button>
 
-      <Modal opened={opened} onClose={close} title='Add Cagtegory'>
+      <Modal opened={opened} onClose={close} title='Add Category'>
         <AddEditCategoryForm onClose={close} />
       </Modal>
     </>

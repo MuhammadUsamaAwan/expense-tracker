@@ -101,7 +101,7 @@ export function AddEditExpenseForm({ categories, onClose, expense }: AddEditExpe
         </Flex>
       </form>
 
-      <Modal opened={opened} onClose={close} title='Add Cagtegory'>
+      <Modal opened={opened} onClose={close} title='Add Expense'>
         <AddEditCategoryForm onClose={close} />
       </Modal>
     </>

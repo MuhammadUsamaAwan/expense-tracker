@@ -1,17 +1,11 @@
+import type { getCategories, getExpenses, getTemplates } from '~/lib/fetchers';
+
 export type JWTPayload = {
   username: string;
 };
 
-export type Category = {
-  id: string;
-  name: string;
-  color: string;
-};
+export type Category = Awaited<ReturnType<typeof getCategories>>[number];
 
-export type Expense = {
-  id: string;
-  amount: number;
-  date: Date;
-  category: Category;
-  description: string | null;
-};
+export type Expense = Awaited<ReturnType<typeof getExpenses>>[number];
+
+export type Template = Awaited<ReturnType<typeof getTemplates>>[number];

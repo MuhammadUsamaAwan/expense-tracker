@@ -24,3 +24,12 @@ export const expenseSchema = z.object({
 export const updateExpenseSchema = expenseSchema.extend({
   id: z.string().uuid(),
 });
+
+export const templateSchema = z.object({
+  name: z.string().trim().min(3).max(30),
+  expenses: z.array(expenseSchema.omit({ date: true })),
+});
+
+export const updateTemplateSchema = templateSchema.extend({
+  id: z.string().uuid(),
+});

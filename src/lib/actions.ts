@@ -11,14 +11,16 @@ import { type z } from 'zod';
 import { env } from '~/env.mjs';
 import type { JWTPayload } from '~/types';
 import { db } from '~/db';
-import { categories, expenses, users } from '~/db/schema';
+import { categories, expenses, templates, users } from '~/db/schema';
 import { getUser } from '~/lib/auth';
 import {
   authSchema,
   categorySchema,
   expenseSchema,
+  templateSchema,
   updateCategorySchema,
   updateExpenseSchema,
+  updateTemplateSchema,
 } from '~/lib/validations';
 
 export async function signup(rawInput: z.infer<typeof authSchema>) {
@@ -149,4 +151,45 @@ export async function deleteExpense(id: string) {
   }
   await db.delete(expenses).where(and(eq(expenses.id, id), eq(expenses.username, user.username)));
   revalidatePath('/');
+}
+
+export async function addTemplate(rawInput: z.infer<typeof templateSchema>) {
+  const user = await getUser();
+  if (!user) {
+    throw new Error('Unauthorized');
+  }
+  const { name, expenses: _expenses } = templateSchema.parse(rawInput);
+  const [template] = await db.insert(templates).values({ name, username: user.username }).returning({
+    id: templates.id,
+  });
+  if (!template) {
+    throw new Error('Unable to create template');
+  }
+  await db.insert(expenses).values(_expenses.map(e => ({ ...e, username: user.username, templateId: template.id })));
+  revalidatePath('/', 'layout');
+}
+
+export async function updateTemplate(rawInput: z.infer<typeof updateTemplateSchema>) {
+  const user = await getUser();
+  if (!user) {
+    throw new Error('Unauthorized');
+  }
+  const { id, name, expenses: _expenses } = updateTemplateSchema.parse(rawInput);
+  await db
+    .update(templates)
+    .set({ name })
+    .where(and(eq(templates.id, id), eq(templates.username, user.username)));
+  await db.delete(expenses).where(and(eq(expenses.templateId, id), eq(expenses.username, user.username)));
+  await db.insert(expenses).values(_expenses.map(e => ({ ...e, username: user.username, templateId: id })));
+  revalidatePath('/', 'layout');
+}
+
+export async function deleteTemplate(id: string) {
+  const user = await getUser();
+  if (!user) {
+    throw new Error('Unauthorized');
+  }
+  await db.delete(templates).where(and(eq(templates.id, id), eq(templates.username, user.username)));
+  await db.delete(expenses).where(and(eq(expenses.templateId, id), eq(expenses.username, user.username)));
+  revalidatePath('/', 'layout');
 }

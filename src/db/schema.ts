@@ -33,5 +33,14 @@ export const expenses = createTable('expenses', {
     .references(() => users.username)
     .notNull(),
   description: varchar('description', { length: 255 }),
-  date: timestamp('date').notNull(),
+  date: timestamp('date'),
+  templateId: uuid('templateId').references(() => templates.id),
+});
+
+export const templates = createTable('templates', {
+  id: uuid('id')
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  name: varchar('name', { length: 255 }).notNull(),
+  username: varchar('username', { length: 255 }).references(() => users.username),
 });

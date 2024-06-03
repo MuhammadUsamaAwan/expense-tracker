@@ -1,10 +1,10 @@
 import dayjs from 'dayjs';
-import { and, asc, eq, gt, lt } from 'drizzle-orm';
+import { and, asc, eq, gt, isNull, lt } from 'drizzle-orm';
 
 import 'server-only';
 
 import { db } from '~/db';
-import { categories, expenses } from '~/db/schema';
+import { categories, expenses, templates } from '~/db/schema';
 import { getUser } from '~/lib/auth';
 
 export async function getExpenses({ startDate, endDate }: { startDate?: string; endDate?: string }) {
@@ -29,6 +29,7 @@ export async function getExpenses({ startDate, endDate }: { startDate?: string; 
     .where(
       and(
         eq(expenses.username, user.username),
+        isNull(expenses.templateId),
         startDate ? gt(expenses.date, dayjs(startDate).subtract(1, 'day').toDate()) : undefined,
         endDate ? lt(expenses.date, dayjs(endDate).toDate()) : undefined
       )
@@ -50,4 +51,18 @@ export async function getCategories() {
     })
     .from(categories)
     .where(eq(categories.username, user.username));
+}
+
+export async function getTemplates() {
+  const user = await getUser();
+  if (!user) {
+    return [];
+  }
+  return db
+    .select({
+      id: templates.id,
+      name: templates.name,
+    })
+    .from(templates)
+    .where(eq(templates.username, user.username));
 }

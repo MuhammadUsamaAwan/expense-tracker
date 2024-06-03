@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Box, Button, Flex, Space, Text, Title } from '@mantine/core';
-import { IconLogout, IconTag } from '@tabler/icons-react';
+import { IconLogout, IconTag, IconTemplate } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 
 import { signout } from '~/lib/actions';
@@ -36,18 +36,19 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       <Title order={1} mb='sm' ta='center' flex={1}>
         Expense Tracker
       </Title>
-      <Flex mb='lg' justify='space-between' wrap='wrap' gap='sm'>
-        <Flex align='center'>
-          <AddExpense categories={categories} />
-          <Button leftSection={<IconTag size={14} />} component={Link} href='/manage-categories' ml='sm'>
-            Manage Categories
-          </Button>
-        </Flex>
-        <form action={signout}>
+      <Flex mb='lg' wrap='wrap' gap='sm'>
+        <AddExpense categories={categories} />
+        <Button leftSection={<IconTag size={14} />} component={Link} href='/manage-categories'>
+          Manage Categories
+        </Button>
+        <Button leftSection={<IconTemplate size={14} />} component={Link} href='/manage-templates'>
+          Manage Templates
+        </Button>
+        <Box component='form' action={signout} ml='auto'>
           <Button leftSection={<IconLogout size={14} />} variant='outline' type='submit'>
             Logout
           </Button>
-        </form>
+        </Box>
       </Flex>
       <DateRangeFilter />
       <Space h='md' />

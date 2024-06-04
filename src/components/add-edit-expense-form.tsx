@@ -75,7 +75,7 @@ export function AddEditExpenseForm({ categories, onClose, expense }: AddEditExpe
         <Select
           withAsterisk
           label='Category'
-          placeholder='Enter category'
+          placeholder='Select category'
           key={form.key('category')}
           {...form.getInputProps('category')}
           data={categories?.map(c => ({ value: c.id, label: c.name }))}

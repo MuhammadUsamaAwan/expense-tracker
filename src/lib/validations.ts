@@ -33,3 +33,8 @@ export const templateSchema = z.object({
 export const updateTemplateSchema = templateSchema.extend({
   id: z.string().uuid(),
 });
+
+export const addFromTemplateSchema = z.object({
+  template: z.string().uuid(),
+  date: z.date(),
+});

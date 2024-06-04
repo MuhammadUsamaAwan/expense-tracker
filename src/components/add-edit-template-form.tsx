@@ -108,7 +108,7 @@ export function AddEditTemplateForm({ onClose, categories, template }: AddEditTe
             <Select
               withAsterisk
               label='Category'
-              placeholder='Enter category'
+              placeholder='Select category'
               key={form.key(`expenses.${i}.category`)}
               {...form.getInputProps(`expenses.${i}.category`)}
               data={categories?.map(c => ({ value: c.id, label: c.name }))}

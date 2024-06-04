@@ -14,6 +14,7 @@ import { db } from '~/db';
 import { categories, expenses, templates, users } from '~/db/schema';
 import { getUser } from '~/lib/auth';
 import {
+  addFromTemplateSchema,
   authSchema,
   categorySchema,
   expenseSchema,
@@ -191,5 +192,29 @@ export async function deleteTemplate(id: string) {
   }
   await db.delete(templates).where(and(eq(templates.id, id), eq(templates.username, user.username)));
   await db.delete(expenses).where(and(eq(expenses.templateId, id), eq(expenses.username, user.username)));
+  revalidatePath('/', 'layout');
+}
+
+export async function addFromTemplate(rawInput: z.infer<typeof addFromTemplateSchema>) {
+  const user = await getUser();
+  if (!user) {
+    throw new Error('Unauthorized');
+  }
+  const { date, template } = addFromTemplateSchema.parse(rawInput);
+  const _expenses = await db
+    .select({
+      amount: expenses.amount,
+      category: expenses.category,
+      description: expenses.description,
+    })
+    .from(expenses)
+    .where(eq(expenses.templateId, template));
+  await db.insert(expenses).values(
+    _expenses.map(e => ({
+      ...e,
+      date,
+      username: user.username,
+    }))
+  );
   revalidatePath('/', 'layout');
 }

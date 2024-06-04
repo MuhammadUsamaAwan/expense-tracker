@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 
 import { signout } from '~/lib/actions';
 import { getUser } from '~/lib/auth';
-import { getCategories, getExpenses } from '~/lib/fetchers';
+import { getCategories, getExpenses, getTemplates } from '~/lib/fetchers';
 import { AddExpense } from '~/components/add-expense';
 import { DateRangeFilter } from '~/components/daterange-filter';
 import { ExpensesDonutChart } from '~/components/expenses-donut-chart';
@@ -23,6 +23,7 @@ type HomePageProps = {
 export default async function HomePage({ searchParams }: HomePageProps) {
   const user = await getUser();
   const categories = await getCategories();
+  const templates = await getTemplates();
   const startDate = searchParams.startDate ?? dayjs().startOf('month').format('YYYY-MM-DD');
   const endDate = searchParams.endDate ?? dayjs().endOf('month').format('YYYY-MM-DD');
   const expenses = await getExpenses({ startDate, endDate });
@@ -37,7 +38,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         Expense Tracker
       </Title>
       <Flex mb='lg' wrap='wrap' gap='sm'>
-        <AddExpense categories={categories} />
+        <AddExpense categories={categories} templates={templates} />
         <Button leftSection={<IconTag size={14} />} component={Link} href='/manage-categories'>
           Manage Categories
         </Button>

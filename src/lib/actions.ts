@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/require-await */
 'use server';
 
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { compare, hash } from 'bcryptjs';
 import { and, eq } from 'drizzle-orm';
@@ -97,7 +97,7 @@ export async function addCategory(rawInput: z.infer<typeof categorySchema>) {
   }
   const { name, color } = categorySchema.parse(rawInput);
   await db.insert(categories).values({ name, color, username: user.username });
-  revalidateTag('categories');
+  revalidatePath('/', 'layout');
 }
 
 export async function updateCategory(rawInput: z.infer<typeof updateCategorySchema>) {
@@ -110,7 +110,7 @@ export async function updateCategory(rawInput: z.infer<typeof updateCategorySche
     .update(categories)
     .set({ name, color })
     .where(and(eq(categories.id, id), eq(categories.username, user.username)));
-  revalidateTag('categories');
+  revalidatePath('/', 'layout');
 }
 
 export async function deleteCategory(id: string) {
@@ -119,7 +119,7 @@ export async function deleteCategory(id: string) {
     throw new Error('Unauthorized');
   }
   await db.delete(categories).where(and(eq(categories.id, id), eq(categories.username, user.username)));
-  revalidateTag('categories');
+  revalidatePath('/', 'layout');
 }
 
 export async function addExpense(rawInput: z.infer<typeof expenseSchema>) {
@@ -129,7 +129,7 @@ export async function addExpense(rawInput: z.infer<typeof expenseSchema>) {
   }
   const { amount, date, category, description } = expenseSchema.parse(rawInput);
   await db.insert(expenses).values({ amount, date, category, description, username: user.username });
-  revalidateTag('expenses');
+  revalidatePath('/');
 }
 
 export async function updateExpense(rawInput: z.infer<typeof updateExpenseSchema>) {
@@ -142,7 +142,7 @@ export async function updateExpense(rawInput: z.infer<typeof updateExpenseSchema
     .update(expenses)
     .set({ amount, date, category, description })
     .where(and(eq(expenses.id, id), eq(expenses.username, user.username)));
-  revalidateTag('expenses');
+  revalidatePath('/');
 }
 
 export async function deleteExpense(id: string) {
@@ -151,7 +151,7 @@ export async function deleteExpense(id: string) {
     throw new Error('Unauthorized');
   }
   await db.delete(expenses).where(and(eq(expenses.id, id), eq(expenses.username, user.username)));
-  revalidateTag('expenses');
+  revalidatePath('/');
 }
 
 export async function addTemplate(rawInput: z.infer<typeof templateSchema>) {
@@ -167,7 +167,8 @@ export async function addTemplate(rawInput: z.infer<typeof templateSchema>) {
     throw new Error('Unable to create template');
   }
   await db.insert(expenses).values(_expenses.map(e => ({ ...e, username: user.username, templateId: template.id })));
-  revalidateTag('templates');
+  revalidatePath('/');
+  revalidatePath('/manage-templates');
 }
 
 export async function updateTemplate(rawInput: z.infer<typeof updateTemplateSchema>) {
@@ -182,7 +183,8 @@ export async function updateTemplate(rawInput: z.infer<typeof updateTemplateSche
     .where(and(eq(templates.id, id), eq(templates.username, user.username)));
   await db.delete(expenses).where(and(eq(expenses.templateId, id), eq(expenses.username, user.username)));
   await db.insert(expenses).values(_expenses.map(e => ({ ...e, username: user.username, templateId: id })));
-  revalidateTag('templates');
+  revalidatePath('/');
+  revalidatePath('/manage-templates');
 }
 
 export async function deleteTemplate(id: string) {
@@ -192,7 +194,8 @@ export async function deleteTemplate(id: string) {
   }
   await db.delete(templates).where(and(eq(templates.id, id), eq(templates.username, user.username)));
   await db.delete(expenses).where(and(eq(expenses.templateId, id), eq(expenses.username, user.username)));
-  revalidateTag('templates');
+  revalidatePath('/');
+  revalidatePath('/manage-templates');
 }
 
 export async function addFromTemplate(rawInput: z.infer<typeof addFromTemplateSchema>) {
@@ -216,5 +219,5 @@ export async function addFromTemplate(rawInput: z.infer<typeof addFromTemplateSc
       username: user.username,
     }))
   );
-  revalidateTag('expenses');
+  revalidatePath('/');
 }

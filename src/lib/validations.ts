@@ -27,7 +27,7 @@ export const updateExpenseSchema = expenseSchema.extend({
 
 export const templateSchema = z.object({
   name: z.string().trim().min(3).max(30),
-  expenses: z.array(expenseSchema.omit({ date: true })),
+  expenses: z.array(expenseSchema.omit({ date: true })).min(1),
 });
 
 export const updateTemplateSchema = templateSchema.extend({

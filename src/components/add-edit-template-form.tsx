@@ -40,7 +40,7 @@ export function AddEditTemplateForm({ onClose, categories, template }: AddEditTe
     mode: 'uncontrolled',
     initialValues: {
       name: template?.name ?? '',
-      expenses: [] as { key: string; amount: number; category: string; description: string }[],
+      expenses: template?.expenses ?? [{ id: randomId() }],
     },
     validate: zodResolver(templateSchema),
   });
@@ -52,8 +52,10 @@ export function AddEditTemplateForm({ onClose, categories, template }: AddEditTe
           startTransition(async () => {
             try {
               if (template) {
+                // @ts-expect-error not properly typed
                 await updateTemplate({ ...values, id: template.id });
               } else {
+                // @ts-expect-error not properly typed
                 await addTemplate(values);
               }
               onClose();
@@ -74,29 +76,31 @@ export function AddEditTemplateForm({ onClose, categories, template }: AddEditTe
           data-autofocus
         />
         {form.getValues().expenses.map((e, i) => (
-          <Fieldset key={e.key} mb='md' pb={0}>
+          <Fieldset key={e.id} mb='md' pb={0}>
             <Group justify='space-between' mb={2}>
               <Text fw={600}>Expense {i + 1}</Text>
-              <ActionIcon
-                variant='subtle'
-                color='red'
-                onClick={() =>
-                  form.setFieldValue(
-                    'expenses',
-                    form.getValues().expenses.filter((_, j) => j !== i)
-                  )
-                }
-                aria-label='Delete expense'
-              >
-                <IconTrash size={16} />
-              </ActionIcon>
+              {i !== 0 && (
+                <ActionIcon
+                  variant='subtle'
+                  color='red'
+                  onClick={() =>
+                    form.setFieldValue(
+                      'expenses',
+                      form.getValues().expenses.filter((_, j) => j !== i)
+                    )
+                  }
+                  aria-label='Delete expense'
+                >
+                  <IconTrash size={16} />
+                </ActionIcon>
+              )}
             </Group>
             <NumberInput
               withAsterisk
               label='Amount'
               placeholder='Enter amount'
               key={form.key(`expenses.${i}.amount`)}
-              {...form.getInputProps('amount')}
+              {...form.getInputProps(`expenses.${i}.amount`)}
               min={0}
               mb='md'
               data-autofocus
@@ -106,7 +110,7 @@ export function AddEditTemplateForm({ onClose, categories, template }: AddEditTe
               label='Category'
               placeholder='Enter category'
               key={form.key(`expenses.${i}.category`)}
-              {...form.getInputProps('category')}
+              {...form.getInputProps(`expenses.${i}.category`)}
               data={categories?.map(c => ({ value: c.id, label: c.name }))}
               searchable
             />
@@ -117,7 +121,7 @@ export function AddEditTemplateForm({ onClose, categories, template }: AddEditTe
               label='Description'
               placeholder='Enter description'
               key={form.key(`expenses.${i}.description`)}
-              {...form.getInputProps('description')}
+              {...form.getInputProps(`expenses.${i}.description`)}
               mb='md'
             />
           </Fieldset>
@@ -125,12 +129,7 @@ export function AddEditTemplateForm({ onClose, categories, template }: AddEditTe
         <Group justify='center' mt='md'>
           <Button
             type='button'
-            onClick={() =>
-              form.setFieldValue('expenses', [
-                ...form.getValues().expenses,
-                { key: randomId(), amount: 0, category: '', description: '' },
-              ])
-            }
+            onClick={() => form.setFieldValue('expenses', [...form.getValues().expenses, { id: randomId() }])}
           >
             Add expense
           </Button>

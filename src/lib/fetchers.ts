@@ -5,6 +5,7 @@ import 'server-only';
 
 import { db } from '~/db';
 import { categories, expenses, templates } from '~/db/schema';
+import { jsonAggBuildObject } from '~/db/utils';
 import { getUser } from '~/lib/auth';
 
 export async function getExpenses({ startDate, endDate }: { startDate?: string; endDate?: string }) {
@@ -62,7 +63,15 @@ export async function getTemplates() {
     .select({
       id: templates.id,
       name: templates.name,
+      expenses: jsonAggBuildObject({
+        id: expenses.id,
+        amount: expenses.amount,
+        description: expenses.description,
+        category: expenses.category,
+      }),
     })
     .from(templates)
-    .where(eq(templates.username, user.username));
+    .innerJoin(expenses, eq(templates.id, expenses.templateId))
+    .where(eq(templates.username, user.username))
+    .groupBy(templates.id);
 }

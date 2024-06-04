@@ -6,6 +6,7 @@ import { IconArrowNarrowLeft } from '@tabler/icons-react';
 import { getUser } from '~/lib/auth';
 import { getCategories, getTemplates } from '~/lib/fetchers';
 import { AddTemplate } from '~/components/add-template';
+import { TemplatesTable } from '~/components/template-table';
 
 export default async function ManageTemplates() {
   const user = await getUser();
@@ -27,7 +28,11 @@ export default async function ManageTemplates() {
           Back
         </Button>
       </Flex>
-      {templates.length === 0 ? <Text>No templates yet..</Text> : <>WIP</>}
+      {templates.length === 0 ? (
+        <Text>No templates yet..</Text>
+      ) : (
+        <TemplatesTable categories={categories} templates={templates} />
+      )}
     </>
   );
 }

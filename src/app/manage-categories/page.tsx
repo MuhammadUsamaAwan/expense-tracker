@@ -19,7 +19,7 @@ export default async function ManageCategories() {
   return (
     <>
       <Title order={1} mb='sm' flex={1}>
-        Manage Category
+        Manage Categories
       </Title>
       <Flex mb='lg' justify='space-between'>
         <AddCategory />

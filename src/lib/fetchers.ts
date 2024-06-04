@@ -43,6 +43,7 @@ export const getExpenses = cache(
   ['expenses'],
   {
     tags: ['expenses'],
+    revalidate: 10,
   }
 );
 
@@ -62,7 +63,7 @@ export const getCategories = cache(
       .where(eq(categories.username, user.username));
   },
   ['categories'],
-  { tags: ['categories'] }
+  { tags: ['categories'], revalidate: 10 }
 );
 
 export const getTemplates = cache(
@@ -88,5 +89,5 @@ export const getTemplates = cache(
       .groupBy(templates.id);
   },
   ['templates'],
-  { tags: ['templates'] }
+  { tags: ['templates'], revalidate: 10 }
 );

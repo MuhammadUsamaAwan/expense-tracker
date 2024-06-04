@@ -33,6 +33,7 @@
     "drizzle-orm": "^0.30.10",
     "jose": "^5.3.0",
     "mantine-form-zod-resolver": "^1.1.0",
+    "mantine-react-table": "beta",
     "next": "14.2.3",
     "next-themes": "^0.3.0",
     "react": "^18",

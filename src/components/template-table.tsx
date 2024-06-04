@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-import { ActionIcon, Modal, Table } from '@mantine/core';
+import { useMemo, useState } from 'react';
+import { ActionIcon, Flex, Modal } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { MantineReactTable, useMantineReactTable, type MRT_ColumnDef } from 'mantine-react-table';
 
 import type { Category, Template } from '~/types';
 import { DeleteTemplate } from '~/components//delete-template';
@@ -19,49 +20,59 @@ export function TemplatesTable({ categories, templates }: TemplatesTableProps) {
   const [openedEdit, { open: openEdit, close: closeEdit }] = useDisclosure(false);
   const [openedDelete, { open: openDelete, close: closeDelete }] = useDisclosure(false);
 
+  const columns = useMemo<MRT_ColumnDef<Template>[]>(
+    () => [
+      {
+        header: 'Name',
+        accessorKey: 'name',
+      },
+      {
+        header: 'Actions',
+        size: 80,
+        Cell: ({ row }) => (
+          <Flex>
+            <ActionIcon
+              variant='subtle'
+              color='gray'
+              onClick={() => {
+                setTemplate(row.original);
+                openEdit();
+              }}
+              aria-label='Edit template'
+            >
+              <IconEdit size={16} />
+            </ActionIcon>
+            <ActionIcon
+              variant='subtle'
+              color='red'
+              onClick={() => {
+                setTemplate(row.original);
+                openDelete();
+              }}
+              aria-label='Delete template'
+            >
+              <IconTrash size={16} />
+            </ActionIcon>
+          </Flex>
+        ),
+      },
+    ],
+    [openDelete, openEdit]
+  );
+
+  const table = useMantineReactTable({
+    columns,
+    data: templates ?? [],
+    enablePagination: false,
+    enableBottomToolbar: false,
+    initialState: {
+      density: 'xs',
+    },
+  });
+
   return (
     <>
-      <Table.ScrollContainer minWidth={375}>
-        <Table striped highlightOnHover withTableBorder withColumnBorders>
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th>Name</Table.Th>
-              <Table.Th>Actions</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            {templates.map(c => (
-              <Table.Tr key={c.id}>
-                <Table.Td>{c.name}</Table.Td>
-                <Table.Td width={80}>
-                  <ActionIcon
-                    variant='subtle'
-                    color='gray'
-                    onClick={() => {
-                      setTemplate(c);
-                      openEdit();
-                    }}
-                    aria-label='Edit template'
-                  >
-                    <IconEdit size={16} />
-                  </ActionIcon>
-                  <ActionIcon
-                    variant='subtle'
-                    color='red'
-                    onClick={() => {
-                      setTemplate(c);
-                      openDelete();
-                    }}
-                    aria-label='Delete template'
-                  >
-                    <IconTrash size={16} />
-                  </ActionIcon>
-                </Table.Td>
-              </Table.Tr>
-            ))}
-          </Table.Tbody>
-        </Table>
-      </Table.ScrollContainer>
+      <MantineReactTable table={table} />
 
       <Modal opened={openedEdit} onClose={closeEdit} title='Edit Template'>
         <AddEditTemplateForm categories={categories} template={template} onClose={closeEdit} />

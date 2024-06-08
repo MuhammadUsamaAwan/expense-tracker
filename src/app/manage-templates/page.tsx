@@ -10,12 +10,15 @@ import { TemplatesTable } from '~/components/template-table';
 
 export default async function ManageTemplates() {
   const user = await getUser();
-  const templates = await getTemplates();
-  const categories = await getCategories();
 
   if (!user) {
     redirect('/signin');
   }
+
+  const templatesPromise = getTemplates();
+  const categoriesPromise = getCategories();
+
+  const [templates, categories] = await Promise.all([templatesPromise, categoriesPromise]);
 
   return (
     <>

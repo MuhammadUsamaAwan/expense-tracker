@@ -7,8 +7,8 @@ import { signout } from '~/lib/actions';
 import { getUser } from '~/lib/auth';
 import { getCategories, getExpenses, getTemplates } from '~/lib/fetchers';
 import { AddExpense } from '~/components/add-expense';
+import { CategoryExpenseSummary } from '~/components/category-expense-summary';
 import { DateRangeFilter } from '~/components/daterange-filter';
-import { ExpensesDonutChart } from '~/components/expenses-donut-chart';
 import { ExpensesLineChart } from '~/components/expenses-line-chart';
 import { ExpensesTable } from '~/components/expenses-table';
 
@@ -61,7 +61,7 @@ export default async function ExpensePage({ startDate, endDate }: ExpensePagePro
             </Box>
             <Box component='span'>{expenses.reduce((acc, e) => acc + e.amount, 0)}</Box>
           </Flex>
-          <ExpensesDonutChart expenses={expenses} />
+          <CategoryExpenseSummary expenses={expenses} />
           <Space h='md' />
           <ExpensesLineChart expenses={expenses} startDate={startDate} endDate={endDate} />
           <Space h='lg' />
